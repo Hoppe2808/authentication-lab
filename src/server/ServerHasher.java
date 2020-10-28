@@ -1,5 +1,9 @@
 package server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,20 +35,42 @@ public class ServerHasher {
 		return "";
 	}
 	
+	
+	//username hashedpassword salt
+	//user -g dfg 
+	
 	//Main for generating passwords / salts for the passwords
-	public static void main(String[] args) {
-		SecureRandom random = new SecureRandom();
-		byte[] salt = new byte[16];
-		random.nextBytes(salt);
-		String byteString = "";
-		for(int i = 0; i < salt.length; i++) {
-			byteString += salt[i]+",";
+	public static void main(String[] args) throws IOException {
+		File file = new File("PASSWORD.txt");
+		if(!file.exists()) {
+			file.createNewFile();
 		}
-		System.out.println("Used salt: "+new String(salt, StandardCharsets.UTF_8)+" vs in bytes: "+byteString);
 		
-		String hashedProduct = hashWithSha512("asdfghjklqwertyui", salt);
-		System.out.println("Hashed password: "+hashedProduct);
+		PrintWriter writer = new PrintWriter(new File("PASSWORD.txt"));
 		
+		
+		
+		
+		String[] users = new String[] {"Robin", "Morten", "Lukas", "Sebastian"};
+		String[] passwords = new String[] {"niboR", "netroM", "sakuL", "naitsabeS"};
+		
+		for(int i = 0; i < users.length; i++) {
+			SecureRandom random = new SecureRandom();
+			byte[] salt = new byte[16];
+			random.nextBytes(salt);
+			String byteString = "";
+			for(int j = 0; j < salt.length; j++) {
+				byteString += salt[j]+",";
+			}
+			String saltedString = new String(salt, StandardCharsets.UTF_8);
+			System.out.println("Used salt: "+saltedString+" vs in bytes: "+byteString);
+			
+			String hashedProduct = hashWithSha512(passwords[i], salt);
+			
+			System.out.println("Hashed password: "+hashedProduct);
+			writer.println(users[i]+" "+hashedProduct+" "+saltedString);
+		}
+		writer.close();
 		
 	}
 	
