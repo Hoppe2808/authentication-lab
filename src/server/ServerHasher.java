@@ -60,7 +60,7 @@ public class ServerHasher {
 			byte[] salt = new byte[16];
 			random.nextBytes(salt);
 			salt = byte2string(salt).getBytes();
-			String hashedProduct = getSHA512SecurePassword(passwords[i], byte2string(salt));
+			String hashedProduct = getSHA512SecurePassword(passwords[i]+byte2string(salt), byte2string(salt));
 			writer.println(users[i]+" "+hashedProduct+" "+ byte2string(salt));
 				
 		}

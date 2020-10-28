@@ -24,7 +24,7 @@ public class PrinterServer {
 			while (line != null) {
 				String[] combination = line.split(" ");
 				if (combination[0].equals(username)
-						&& ServerHasher.getSHA512SecurePassword(password, combination[2]).equals(combination[1])) {
+						&& ServerHasher.getSHA512SecurePassword(password+combination[2], combination[2]).equals(combination[1])) {
 					reader.close();
 					return true;
 				}
