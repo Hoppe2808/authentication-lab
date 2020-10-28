@@ -12,24 +12,28 @@ public class PrinterServer {
 	public static final int PORT = 5099;
 
 	public static void main(String[] args) throws RemoteException {
+		System.out.println(authenticate("Robin", "niboR"));
 		Registry registry = LocateRegistry.createRegistry(PrinterServer.PORT);
 		registry.rebind("printer", new PrinterServant());
 
 	}
 
-	public static boolean authenticate(String username, String passowrd) {
+	public static boolean authenticate(String username, String password) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("PASSWORD.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 				String[] combination = line.split(" ");
 				if (combination[0].equals(username)
-						&& ServerHasher.hashWithSha512(passowrd, combination[2].getBytes()).equals(combination[1])) {
+						&& ServerHasher.getSHA512SecurePassword(password, combination[2]).equals(combination[1])) {
+					reader.close();
 					return true;
 				}
+				line = reader.readLine();
 			}
+			reader.close();
 		} catch (IOException error) {
-
+			error.printStackTrace();
 		}
 		return false;
 

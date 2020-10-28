@@ -13,37 +13,35 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class ServerHasher {
-
-	private static MessageDigest md;	
 	
-	public static String hashWithSha512(String password, byte[] salt) {
+	
+	public static String getSHA512SecurePassword(String passwordToHash, String salt){
+		String generatedPassword = null;
 		try {
-			md = MessageDigest.getInstance("SHA-512");
-			md.update(salt);
-			
-			//Convert password to bytes
-			byte[] passBytes = password.getBytes();
-			
-			//Get hashed password from password + salt
-			byte[] hashedPassword = md.digest(passBytes);
-			
-			BigInteger number = new BigInteger(1, hashedPassword);
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
+			md.update(salt.getBytes(StandardCharsets.UTF_8));
+			byte[] bytes = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i< bytes.length ;i++){
+				sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			System.out.println(salt);
+			generatedPassword = sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return generatedPassword;
+	}
+
+	public static String byte2string(byte[] bytes){
+		BigInteger number = new BigInteger(1, bytes);
 			
 			String hashedText = number.toString(16);
 			
 			while(hashedText.length() < 32) {
 				hashedText = "0" + hashedText;
 			}
-			
-			//Create into string
-			//String hashedString = new String(hashedPassword, StandardCharsets.UTF_8);
-			
 			return hashedText;
-			
-		} catch (NoSuchAlgorithmException ex) {
-			ex.printStackTrace();
-		}
-		return "";//new byte[0];
 	}
 	
 	
@@ -62,12 +60,13 @@ public class ServerHasher {
 		
 		
 		String[] users = new String[] {"Robin", "Morten", "Lukas", "Sebastian"};
-		String[] passwords = new String[] {"nibR", "netroM", "sakuL", "naitsabeS"};
+		String[] passwords = new String[] {"niboR", "netroM", "sakuL", "naitsabeS"};
 		
 		for(int i = 0; i < users.length; i++) {
 			SecureRandom random = new SecureRandom();
 			byte[] salt = new byte[16];
 			random.nextBytes(salt);
+			salt = byte2string(salt).getBytes();
 			String byteString = "";
 			for(int j = 0; j < salt.length; j++) {
 				byteString += salt[j]+",";
@@ -83,15 +82,10 @@ public class ServerHasher {
 			//outputStream.write(salt);
 			//outputStream.write('\n');
 			
-			String hashedProduct = hashWithSha512(passwords[i], salt);
-			BigInteger number = new BigInteger(1, salt);
+			String hashedProduct = getSHA512SecurePassword(passwords[i], byte2string(salt));
 			
-			String saltedText = number.toString(16);
 			
-			while(saltedText.length() < 32) {
-				saltedText = "0" + saltedText;
-			}
-			writer.println(users[i]+" "+hashedProduct+" "+saltedText);
+			writer.println(users[i]+" "+hashedProduct+" "+ byte2string(salt));
 			
 			
 		}
