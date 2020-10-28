@@ -12,7 +12,6 @@ public class PrinterServer {
 	public static final int PORT = 5099;
 
 	public static void main(String[] args) throws RemoteException {
-		System.out.println(authenticate("Robin", "niboR"));
 		Registry registry = LocateRegistry.createRegistry(PrinterServer.PORT);
 		registry.rebind("printer", new PrinterServant());
 
