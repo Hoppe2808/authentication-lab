@@ -18,12 +18,15 @@ public class Client {
 		PrinterServiceInterface service = (PrinterServiceInterface) Naming.lookup("rmi://localhost:"+PrinterServer.PORT+"/printer");
 		Scanner in = new Scanner(System.in);
 
-		System.out.println("Commands are: \n login username password, print filename printer, queue printer, topQueue printer job, start, stop, restart, status printer, readConfig parameter, setConfig parameter value");
+		System.out.println("Commands are: \nlogin username password, print filename printer, queue printer, topQueue printer job, start, stop, restart, status printer, readConfig parameter, setConfig parameter value");
 		boolean running = true;
 		while (running) {
-			System.out.println("Enter commeand here: ");
+			System.out.println("Enter command here: ");
 			String input = in.nextLine();
 			String[] input2 = input.split(" ");
+			if(input2.length == 0) {
+				continue;
+			}
 			switch (input2[0]) {
 
 				case "login":
@@ -35,6 +38,11 @@ public class Client {
 					String password = input2[2];
 
 					accessToken = service.login(username, password);
+					if(!accessToken.equals("")){
+						System.out.println("Logged in succesfully.");
+					} else {
+						System.out.println("Failed to login.");
+					}
 					break;
 
 				case "print":
@@ -141,6 +149,7 @@ public class Client {
 					break;
 			}
 		}
+		in.close();
 	}
 	
 }
