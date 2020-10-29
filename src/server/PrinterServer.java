@@ -14,7 +14,6 @@ public class PrinterServer {
 	public static void main(String[] args) throws RemoteException {
 		Registry registry = LocateRegistry.createRegistry(PrinterServer.PORT);
 		registry.rebind("printer", new PrinterServant());
-
 	}
 
 	public static boolean authenticate(String username, String password) {

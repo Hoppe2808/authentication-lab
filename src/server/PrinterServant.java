@@ -6,6 +6,7 @@ import java.rmi.server.UnicastRemoteObject;
 import interfaces.PrinterServiceInterface;
 
 public class PrinterServant extends UnicastRemoteObject implements PrinterServiceInterface {
+	TokenManager tokenManager = new TokenManager();
 
 	protected PrinterServant() throws RemoteException {
 		super();
@@ -14,16 +15,14 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 	@Override
 	public String login(String username, String password) throws RemoteException {
 		if (PrinterServer.authenticate(username, password)) {
-			// TODO SEBASTIAN TOKENS
-			return "SomeRandomAccessToken";
+			return tokenManager.generateToken(username);
 		}
 		return "";
 	}
 
 	@Override
 	public boolean print(String filename, String printer, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS (maybe pull all these calls to service?
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Client requested "+filename+" on printer: "+printer);
@@ -32,8 +31,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public String queue(String printer, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Client requested the queue on following printer: "+printer);
@@ -42,8 +40,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public boolean topQueue(String printer, int job, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Putting job #"+job+" at the top on printer: "+printer);
@@ -52,8 +49,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public boolean start(String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Starting the printer service.");
@@ -62,8 +58,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public boolean stop(String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Stopping the printer service.");
@@ -72,8 +67,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public boolean restart(String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Restarting the printer service.");
@@ -82,8 +76,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public String status(String printer, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Client requested status of printer: "+printer);
@@ -92,8 +85,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public String readConfig(String parameter, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Client requested to read config of parameter.");
@@ -102,15 +94,10 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 
 	@Override
 	public boolean setConfig(String parameter, String value, String accessToken) throws RemoteException {
-		// TODO SEBASTIAN TOKENS
-		if(accessToken != "checksomerandom accessToken") {
+		if(!tokenManager.validateToken(accessToken)) {
 			throw new RemoteException("Access not allowed");
 		}
 		System.out.println("Client setting config parameter: "+parameter+" with value: "+value);
 		return true;
 	}
-
-	
-	
-
 }

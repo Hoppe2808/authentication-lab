@@ -18,9 +18,9 @@ public class Client {
 		PrinterServiceInterface service = (PrinterServiceInterface) Naming.lookup("rmi://localhost:"+PrinterServer.PORT+"/printer");
 		Scanner in = new Scanner(System.in);
 
+		System.out.println("Commands are: \n login username password, print filename printer, queue printer, topQueue printer job, start, stop, restart, status printer, readConfig parameter, setConfig parameter value");
 		boolean running = true;
 		while (running) {
-			System.out.println("Commands are: \n login username password, print filename printer, queue printer, topQueue printer job, start, stop, restart, status printer, readConfig parameter, setConfig parameter value");
 			System.out.println("Enter commeand here: ");
 			String input = in.nextLine();
 			String[] input2 = input.split(" ");
@@ -44,7 +44,7 @@ public class Client {
 					}
 
 					try {
-						service.print(input2[1], input2[2], accessToken);
+						System.out.println(service.print(input2[1], input2[2], accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -56,7 +56,7 @@ public class Client {
 						break;
 					}
 					try {
-						service.queue(input2[1], accessToken);
+						System.out.println(service.queue(input2[1], accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -68,7 +68,7 @@ public class Client {
 						break;
 					}
 					try {
-						service.topQueue(input2[1], Integer.parseInt(input2[2]), accessToken);
+						System.out.println(service.topQueue(input2[1], Integer.parseInt(input2[2]), accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -76,7 +76,7 @@ public class Client {
 
 				case "start":
 					try {
-						service.start(accessToken);
+						System.out.println(service.start(accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -84,7 +84,7 @@ public class Client {
 
 				case "stop":
 					try {
-						service.stop(accessToken);
+						System.out.println(service.stop(accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -94,7 +94,7 @@ public class Client {
 
 				case "restart":
 					try {
-						service.restart(accessToken);
+						System.out.println(service.restart(accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -106,7 +106,7 @@ public class Client {
 						break;
 					}
 					try {
-						service.status(input2[1], accessToken);
+						System.out.println(service.status(input2[1], accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -118,7 +118,7 @@ public class Client {
 						break;
 					}
 					try {
-						service.readConfig(input2[1], accessToken);
+						System.out.println(service.readConfig(input2[1], accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
@@ -130,7 +130,7 @@ public class Client {
 						break;
 					}
 					try {
-						service.setConfig(input2[1], input2[2], accessToken);
+						System.out.println(service.setConfig(input2[1], input2[2], accessToken));
 					} catch (RemoteException e) {
 						System.out.println("Something went wrong: "+ e.getMessage());
 					}
