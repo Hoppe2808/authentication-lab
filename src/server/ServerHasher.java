@@ -51,9 +51,9 @@ public class ServerHasher {
 			file.createNewFile();
 		}
 		PrintWriter writer = new PrintWriter(new File("PASSWORD.txt"));
-		
-		String[] users = new String[] {"Seb"};
-		String[] passwords = new String[] {"123"};
+
+		String[] users = new String[] {"Alice", "Bob", "Cecilia", "David", "Erica", "Fred", "George"};
+		String[] passwords = new String[] {"123", "456", "789", "012", "345", "678", "901"};
 		
 		for(int i = 0; i < users.length; i++) {
 			SecureRandom random = new SecureRandom();
