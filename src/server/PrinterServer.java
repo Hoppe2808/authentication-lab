@@ -9,6 +9,8 @@ import java.rmi.registry.Registry;
 
 public class PrinterServer {
 
+	
+	public static final boolean ROLE_HIARCHY = true;
 	public static final int PORT = 5099;
 
 	public static void main(String[] args) throws RemoteException {
