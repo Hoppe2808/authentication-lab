@@ -1,5 +1,6 @@
 package server;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,7 +12,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 	AuthorizationByRole roleManager;
 	UserAuthentication userRoleManager;
 
-	protected PrinterServant() throws RemoteException {
+	protected PrinterServant() throws RemoteException, FileNotFoundException {
 		super();
 		tokenManager = new TokenManager();
 		roleManager = new AuthorizationByRole();
@@ -29,7 +30,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 					if (!role.equals("")) {
 						return tokenManager.generateToken(username, role);
 					}
-				} catch (IOException error) {
+				} catch (Exception error) {
 
 				}
 
@@ -128,7 +129,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 				if (!roleManager.checkPermission(function, tokenManager.getDataOfToken(accessToken).role)) {
 					return false;
 				}
-			} catch (IOException error) {
+			} catch (Exception error) {
 
 			}
 

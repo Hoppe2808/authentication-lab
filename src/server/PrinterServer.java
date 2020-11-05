@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -9,11 +10,10 @@ import java.rmi.registry.Registry;
 
 public class PrinterServer {
 
-	
 	public static final boolean ROLE_HIARCHY = true;
 	public static final int PORT = 5099;
 
-	public static void main(String[] args) throws RemoteException {
+	public static void main(String[] args) throws RemoteException, FileNotFoundException {
 		Registry registry = LocateRegistry.createRegistry(PrinterServer.PORT);
 		registry.rebind("printer", new PrinterServant());
 	}
@@ -24,8 +24,8 @@ public class PrinterServer {
 			String line = reader.readLine();
 			while (line != null) {
 				String[] combination = line.split(" ");
-				if (combination[0].equals(username)
-						&& ServerHasher.getSHA512SecurePassword(password+combination[2], combination[2]).equals(combination[1])) {
+				if (combination[0].equals(username) && ServerHasher
+						.getSHA512SecurePassword(password + combination[2], combination[2]).equals(combination[1])) {
 					reader.close();
 					return true;
 				}
