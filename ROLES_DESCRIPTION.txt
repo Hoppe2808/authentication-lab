@@ -1,4 +1,4 @@
-admin | service_technician power_user | all
-service_technician | | start stop restart status readConfig setConfig 
-power_user | user | topQueue restart
-user | | print queue
+admin:service_technician power_user:all
+service_technician::start stop restart status readConfig setConfig 
+power_user:user:topQueue restart
+user::print queue
