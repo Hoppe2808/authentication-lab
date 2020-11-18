@@ -1,7 +1,9 @@
 alice admin
-bob service_technician
 cecilia power_user
 david user
 erica user
 fred user
-george user
+george user service_technician
+henry user
+ida power_user
+
