@@ -4,17 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class TokenManager {
-	HashMap<String, UserData> tokens = new HashMap<>();
+    HashMap<String, UserData> tokens = new HashMap<>();
 
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, HashSet<String> roles) {
         UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
 
         String token = id.toString() + timestamp + username;
-        tokens.put(token, new UserData(username, role));
+        tokens.put(token, new UserData(username, roles));
         return token;
     }
 
@@ -24,7 +25,7 @@ public class TokenManager {
             LocalDateTime tokenTime = LocalDateTime.parse(token.substring(36, 59));
 
             if (currentTime.compareTo(tokenTime.plusMinutes(30)) > 0) {
-                //Token expired
+                // Token expired
                 tokens.remove(token);
                 return false;
             }
@@ -32,11 +33,11 @@ public class TokenManager {
         }
         return false;
     }
-    
+
     public UserData getDataOfToken(String token) {
-	    if(tokens.containsKey(token)) {
-	    	return tokens.get(token);
-	    }
-	    return null;
+        if (tokens.containsKey(token)) {
+            return tokens.get(token);
+        }
+        return null;
     }
 }

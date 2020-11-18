@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 
 import interfaces.PrinterServiceInterface;
 
@@ -23,12 +24,12 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 	public String login(String username, String password) throws RemoteException {
 		if (PrinterServer.authenticate(username, password)) {
 			if (!PrinterServer.ROLE_HIARCHY) {
-				return tokenManager.generateToken(username, "");
+				return tokenManager.generateToken(username, new HashSet<String>());
 			} else {
 				try {
-					String role = roleManager.getRoleForUser(username);
-					if (!role.equals("")) {
-						return tokenManager.generateToken(username, role);
+					HashSet<String> roles = roleManager.getRoleForUser(username);
+					if (!roles.equals(new HashSet<String>())) {
+						return tokenManager.generateToken(username, roles);
 					}
 				} catch (Exception error) {
 
@@ -126,7 +127,7 @@ public class PrinterServant extends UnicastRemoteObject implements PrinterServic
 		}
 		if (PrinterServer.ROLE_HIARCHY) {
 			try {
-				if (!roleManager.checkPermission(function, tokenManager.getDataOfToken(accessToken).role)) {
+				if (!roleManager.checkPermission(function, tokenManager.getDataOfToken(accessToken).roles)) {
 					return false;
 				}
 			} catch (Exception error) {
