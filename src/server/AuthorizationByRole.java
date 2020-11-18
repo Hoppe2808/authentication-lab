@@ -77,6 +77,7 @@ public class AuthorizationByRole {
     }
 
     public HashSet<String> getRoleForUser(String user) {
+        user = user.toLowerCase();
         if (this.userRole.containsKey(user)) {
             return this.userRole.get(user);
         }
